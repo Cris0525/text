@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/cris/\344\272\272\345\267\245\346\231\272\350\203\275/model.ckpt"
+all_model_checkpoint_paths: "/home/cris/\344\272\272\345\267\245\346\231\272\350\203\275/model.ckpt"
