@@ -4,7 +4,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-import Image
+#import Image
 
 def sum_9_region_new(img, x, y):
 	'''确定噪点 '''
@@ -64,13 +64,13 @@ def get_bin_table(threshold=115):
 	return table
  
 def main1():
-    image = Image.open('/home/cris/Study/AI/MNIST/out_img/char1.png')  
+    image = Image.open('/home/cris/Study/text/AI/MNIST/out_img/char1.png')  
     imgry = image.convert('L')
     table = get_bin_table()
     binary = imgry.point(table, '1')
     noise_point_list = collect_noise_point(binary)
     remove_noise_pixel(binary, noise_point_list)
-    binary.save('/home/cris/Study/AI/MNIST/image/finaly.png')
+    binary.save('/home/cris/Study/text/AI/MNIST/image/finaly.png')
 	#binary.show()
     imageprepare()
     
@@ -79,9 +79,9 @@ def main1():
 # 裁剪字符
 def cut(img):
     # 查找检测物体的轮廓
-    image, contours, hierarchy = cv2.findContours(img, 2,2)
-    cv2.imshow('image',image)
-    # 计数器
+    image, contours,a = cv2.findContours(img,2,2)
+
+    # 计数器zd
     flag = 1
     for cnt in contours:
         # 最小的外接矩形, cnt是一个二值图, x,y是矩阵左上点的坐标, w,h是矩阵的宽和高
@@ -111,7 +111,9 @@ def cut(img):
  # 二值化处理
 def thresh_old(img, l=130, h=255):
     ret,im_fixed=cv2.threshold(img,l,h,cv2.THRESH_BINARY)
-    #im_fixed = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 1)
+    #cv2.imshow('img2',im_fixed)
+    #cv2.waitKey(0)
+    im_fixed = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 1)
     #return im_fixed
     cut(im_fixed)
 
@@ -119,14 +121,17 @@ def thresh_old(img, l=130, h=255):
 def cvt_Color(image):
     
     img=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    #cv2.imshow('img',img)
+    #cv2.waitKey(0)
     thresh_old(img,l=130,h=255)
+  
 
 
 
 
 def imageprepare():
     
-    file_name='/home/cris/Study/AI/MNIST/image/finaly.png'#导入自己的图片地址
+    file_name='/home/cris/Study/text/AI/MNIST/image/finaly.png'#导入自己的图片地址
 
     #进行灰度处理
     im = Image.open(file_name)
@@ -146,7 +151,8 @@ def imageprepare():
 
 
 print("请输入照片地址:")
-image = cv2.imread(str("image/"+raw_input()))   
+image = cv2.imread(str("/home/cris/Study/text/AI/MNIST/image/"+raw_input()))
+
 gary = cvt_Color(image)
 result = imageprepare()
 
@@ -217,7 +223,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 sess = tf.InteractiveSession()
 saver = tf.train.Saver()
 tf.global_variables_initializer().run()
-saver.restore(sess, "/home/cris/Study/AI/MNIST/save/model.ckpt")
+saver.restore(sess, "/home/cris/Study/text/AI/MNIST/save/model.ckpt")
 #print("W1:", sess.run(conv1_weights)) # 打印v1、v2的值一会读取之后对比
 #print("W2:", sess.run(conv1_biases))
 prediction=tf.argmax(y_conv,1)
